@@ -1,5 +1,12 @@
-import {roundToInt} from "../src/types";
-import {dragon1, takeDamage, testDragon} from "../src/app";
+import {Dragon, DragonStatus, roundToInt} from "../src/types";
+import {dragon1, takeDamage} from "../src/app";
+
+const testDragon: Dragon = {
+    maxLifePoints: roundToInt(1000),
+    currentLifePoints: roundToInt(200),
+    status: 'Alive' as DragonStatus,
+    timesDamaged: 0
+};
 
 describe("Dragons taking damage", () => {
     it("should return correct number of remaining hit-points", () => {
@@ -14,6 +21,14 @@ describe("Dragons taking damage", () => {
         expect(takeDamage(dragon1, roundToInt(0.4)).currentLifePoints).toEqual(1000)
         expect(takeDamage(dragon1, roundToInt(0.6)).currentLifePoints).toEqual(999)
         expect(takeDamage(dragon1, roundToInt(113.76)).currentLifePoints).toEqual(886)
+    })
+    it("should not die with remaining hitpoints", () => {
+        expect(takeDamage(dragon1, roundToInt(-124)).status).toEqual("Alive")
+        expect(takeDamage(dragon1, roundToInt(999)).status).toEqual("Alive")
+        expect(takeDamage(dragon1, roundToInt(-1110)).status).toEqual("Alive")
+        expect(takeDamage(dragon1, roundToInt(200)).status).toEqual("Alive")
+        expect(takeDamage(dragon1, roundToInt(167)).status).toEqual("Alive")
+        expect(takeDamage(dragon1, roundToInt(167)).status).toEqual("Alive")
     })
     it("should not heal on a negative", () => {
         expect(takeDamage(dragon1, roundToInt(-124)).currentLifePoints).toEqual(1000)
